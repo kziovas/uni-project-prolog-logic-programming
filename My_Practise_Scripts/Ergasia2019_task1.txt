@@ -1,0 +1,44 @@
+parents(kostas,vasilis,maria).
+parents(eleni,vasilis,maria).
+parents(apostolis,rakias,rita).
+parents(mixalis,rakias,rita).
+parents(vasilis_jnr,fanis,olga).
+parents(kakia,fanis,olga).
+parents([],[],alexandra).
+
+parents(xanthi_kal,kostas_kal,katerina).
+parents(xristina_kal,kostas_kal,katerina).
+parents(apostolis_kal,kostas_kal,katerina).
+
+parents(kostas_kal,apostolis_kal_snr,xanthi_kal_snr).
+
+
+parents(vasilis,mixalis_snr,ntina).
+parents(rakias,mixalis_snr,ntina).
+parents(maria,vasilis_snr,kiriaki).
+parents(fanis,vasilis_snr,kiriaki).
+parents(alexandra,vasilis_snr,kiriaki).
+
+parents(apostolis_kal_snr,unknown1,unknown2).
+parents(ntina,unknown1,unknown2).
+
+/*-------------------------------------*/
+/*       Oikogeniakes sxeseis          */
+/*-------------------------------------*/
+siblings(X,Y):- parents(X,F,M), parents(Y,F,M),(\+X=Y).
+father(Father,Child):- parents(Child,Father,_).
+mother(Mother,Child) :- parents(Child,_,Mother).
+parent(Parent,Child):- parents(Child,Parent,_);parents(Child,_,Parent).
+gfather(Gfather,Child) :- (parents(Child,Father,_);parents(Child,_,Mother)),(parents(Father,Gfather,_);parents(Mother,Gfather,_)).
+gmother(Gmother,Child) :- (parents(Child,Father,_);parents(Child,_,Mother)),(parents(Father,_,Gmother);parents(Mother,_,Gmother)).
+all_kids(Kids,Father) :- findall(Kid,parents(Kid,Father,_),Kids). #findall is a prolog function defined like this: findall(Temp variable, :Goal, -Bag). We look for instances of temp variable satisfying goal and unifies them in a list -Bag.
+first_cousin(X,Y) :- parent(P1,X),parent(P2,Y),siblings(P1,P2).
+sec_cousin(X,Y):-parent(P1,X),parent(P2,Y),first_cousin(P1,P2).
+uncle(Uncle,X):- parent(P1,X),siblings(Uncle,P1),father(Uncle,_).
+aunt(Aunt,X):-parent(P1,X),siblings(Aunt,P1),mother(Aunt,_).
+
+
+
+
+
+
